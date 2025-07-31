@@ -1,32 +1,42 @@
 version 1.0
 import "../structs/Structs.wdl"
-import "../tasks/Tasks.wdl" as EXAMPLE
+import "../tasks/Tasks.wdl" as Tasks
 
-workflow WorkflowName {
+workflow ONT_RefAssemble {
 
     meta {
-        description: "Description of the workflow"
+        description: "Generate reference guided assemblies of ONT reads using Rebaler"
     }
     parameter_meta {
-        input_file: "description of input"
+        reads: "fastq of reads to assemble"
+        reference: "reference genome to assemble against"
+
     }
 
     input {
-        File input_file
+        File merged_bam
+        File reads
+        File reference
     }
 
     # call our first task/workflow
-    call EXAMPLE.FirstTask {
+    call Tasks.Assemble {
         input:
-            input_file = input_file,
+            reads = reads,
+            reference = reference,
     }
-    # pass the output of first task into our second task/workflow.
-    call EXAMPLE.SecondTask {
-        input:
-            input_file = FirstTask.output_file,
-    }
+    ## pass the output of first task into our second task/workflow.
+    #call Tasks.DoradoAlign {
+    #    input:
+    #        input_file = Assemble.assembly,
+    #}
+#
+    #call Tasks.DoradoPolish {
+    #    input:
+    #        input_file = FirstTask.output_file,
+    #}
 
     output {
-        File output_file = SecondTask.results
+        File output_file = Assemble.assembly # WIP
     }
 }
