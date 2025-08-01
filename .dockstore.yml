@@ -3,3 +3,4 @@ workflows:
   - name: ONT_RefAssembly
     subclass: wdl
     primaryDescriptorPath: /wdls/workflows/ONT_RefAssembly.wdl
+    latestTagAsDefault: 'true'
