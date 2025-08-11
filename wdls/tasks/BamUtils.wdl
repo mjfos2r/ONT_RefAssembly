@@ -170,7 +170,6 @@ task FixBamHeaderRG {
 
     parameter_meta {
         input_bam: "raw bam with dirty header, filled with unused RGs"
-        RG: "Optional: read group to keep? Not implemented." # nah no need, unless?
     }
 
     Int disk_size = 365 +  2 * ceil(size(input_bam, "GB"))
