@@ -9,11 +9,6 @@ workflow ONT_RefAssemble {
     meta {
         description: "Generate reference guided assemblies of ONT reads using Rebaler"
     }
-    parameter_meta {
-        reads: "fastq of reads to assemble"
-        reference: "reference genome to assemble against"
-
-    }
 
     input {
         String sample_id
