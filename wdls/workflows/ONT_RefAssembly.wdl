@@ -1,8 +1,7 @@
 version 1.0
-import "../structs/Structs.wdl"
 import "../tasks/Rebaler.wdl" as REBALER
 import "../tasks/Dorado.wdl" as DORADO
-import "ONT_FixBamHeader.wdl" as FixBAM
+import "ONT_FixBamHeader.wdl" as BAM
 import "../tasks/Quast.wdl" as QUAST
 
 workflow ONT_RefAssemble {
@@ -37,7 +36,7 @@ workflow ONT_RefAssemble {
 
     # if only merged is provided, clean this bam file.
     # also coerce merged bam since the type checker is complaining.
-    if (!have_sanitized && have_merged) { call FixBAM.ONT_FixBamHeaderRG as FixBAM { input: input_bam = select_first([merged_bam]) } }
+    if (!have_sanitized && have_merged) { call BAM.ONT_FixBamHeaderRG as FixBAM { input: input_bam = select_first([merged_bam]) } }
 
     # Pick the sanitized bam to output back to the DataTable:
     File sanitized_bam_final = select_first([sanitized_bam_in, FixBAM.sanitized_bam])
@@ -47,6 +46,7 @@ workflow ONT_RefAssemble {
         input:
             reads = reads,
             reference = reference_fa,
+            sample_id = sample_id
     }
 
     call DORADO.Dorado {

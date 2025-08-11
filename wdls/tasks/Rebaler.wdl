@@ -29,8 +29,6 @@ task Assemble {
 
         NPROC=$(cat /proc/cpuinfo | awk '/^processor/{print}' | wc -l)
 
-        filename="$(basename ~{reads})"
-
         if [[ "~{reads}" == *.gz ]]; then
             zcat "~{reads}" > reads.fq
         else
@@ -40,7 +38,6 @@ task Assemble {
         mkdir outdir
         echo "Beginning rebaler assembly."
         echo "Using ~{reference} as reference."
-        echo "outputting consensus to ${outpath}"
         rebaler -t "$NPROC" ~{reference} reads.fq > "~{sample_id}_rebaler.fasta"
         echo "Finished rebaler assembly."
 
