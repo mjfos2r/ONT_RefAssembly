@@ -4,7 +4,7 @@ import "../structs/Structs.wdl"
 task Assemble {
     meta {
         # task-level metadata can go here
-        description: "Assemble reads to a specified reference genome using Rebaler. "
+        description: "Assemble reads to a specified reference genome using Rebaler."
     }
 
     parameter_meta {
@@ -14,7 +14,7 @@ task Assemble {
     }
 
     input {
-        # task inputs are declared here
+        String sample_id
         File reads
         File reference
         RuntimeAttr? runtime_attr_override
@@ -30,21 +30,24 @@ task Assemble {
         NPROC=$(cat /proc/cpuinfo | awk '/^processor/{print}' | wc -l)
 
         filename="$(basename ~{reads})"
-        outpath="outdir/${filename%%.*}.fasta"
 
-        if [[ ~{reads} == *.gz ]]; then
-            zcat ~{reads} > reads.fq
-        # WIP
+        if [[ "~{reads}" == *.gz ]]; then
+            zcat "~{reads}" > reads.fq
+        else
+            mv "~{reads}" reads.fq
         fi
+
         mkdir outdir
-        echo "Beginning rebaler assembly!"
+        echo "Beginning rebaler assembly."
+        echo "Using ~{reference} as reference."
         echo "outputting consensus to ${outpath}"
-        rebaler -t "$NPROC" ~{reference} ~{reads} > "$outpath"
+        rebaler -t "$NPROC" ~{reference} reads.fq > "~{sample_id}_rebaler.fasta"
+        echo "Finished rebaler assembly."
 
     >>>
 
     output {
-        File assembly = "outdir/*.fasta"
+        File assembly = "~{sample_id}_rebaler.fasta"
     }
     RuntimeAttr default_attr = object {
         cpu_cores:          16,
