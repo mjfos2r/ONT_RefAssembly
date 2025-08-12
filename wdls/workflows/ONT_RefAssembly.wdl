@@ -17,7 +17,6 @@ workflow ONT_RefAssemble {
         File reads
         File reference_fa
         File reference_gff
-        String args
     }
 
     # First things first, we need to make sure the bam header for our merged bam is sanitized. this is very important.
