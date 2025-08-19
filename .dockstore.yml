@@ -3,6 +3,8 @@ workflows:
   - name: ONT_RefAssembly
     subclass: wdl
     primaryDescriptorPath: /wdls/workflows/ONT_RefAssembly.wdl
-    latestTagAsDefault: true
+    latestTagAsDefault: 'true'
     authors:
+      - orcid: "0000-0002-6006-0641"
       - name: "Michael J. Foster"
+      - email: "mfoster11@mgh.harvard.edu"
